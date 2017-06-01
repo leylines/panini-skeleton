@@ -1,0 +1,90 @@
+#testimonials {
+  padding-top: 2.8125rem;
+
+  @media (min-width: 768px) {
+    padding-top: 5.625rem;
+  }
+  background: #663fb5 url(../images/backgrounds/mountain.jpg) no-repeat center bottom;
+  background-size: cover;
+
+  .blockquote {
+    margin: 0 auto 2rem;
+    border-left: 0 none;
+    @media (min-width: 768px) {
+      max-width: 60rem;
+      margin-bottom: 4.5rem;
+    }
+    > img {
+      margin-bottom: 1.5625rem;
+      border: 3px solid $main-light;
+    }
+    p {
+      margin-bottom: .9375rem;
+      font-weight: 400;
+      line-height: 1.464;
+      &:before {
+        content: '\201c';
+      }
+      &:after {
+        content: '\201d';
+      }
+    }
+    footer {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.1875;
+      color: #fff; 
+      &:before {
+        content: '';
+      } 
+      &:after {
+        display: block;
+        width: 2.5rem;
+        height: 1px;
+        margin: .625rem auto 0;
+        content: '';
+        background-color: rgba(255, 255, 255, .25);
+      }
+    }
+  }
+
+  .carousel-indicators {
+    position: inherit;
+    bottom: auto;
+    left: auto;
+    width: auto;
+    margin: 0 0 2.1875rem;
+    img {
+      width: 45px;
+      height: 45px;
+      margin: 5.5px auto 0;
+      border: 2px solid $main-dark;
+      transition: all .1s ease-in-out;
+    }
+    li {
+      width: 60px;
+      height: 60px;
+      margin: 0;
+      text-indent: inherit;
+      border: 0;
+      border-radius: 0;
+      opacity: .5;
+      transition: opacity .2s;
+      &:hover {
+        opacity: .9;
+      }
+      &.active {
+        margin: 0;
+        background-color: transparent;
+        opacity: 1;
+        img {
+          width: 56px;
+          height: 56px;
+          margin-top: 0;
+          border: 2px solid $main-light;
+        }
+      }
+    }
+  }
+}
+

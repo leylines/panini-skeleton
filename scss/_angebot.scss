@@ -1,0 +1,39 @@
+#angebot {
+  .card-title {
+    padding-top: 1rem;
+  }
+  .card-flip {
+    perspective: 1000px;
+    &:hover .flip,
+    &.hover .flip {
+      transform: rotateY(180deg);
+    }
+  }
+  .card-flip,
+  .front,
+  .back {
+    min-width: 280px;
+    max-width: 370px;
+    height: 560px;
+  }
+  .flip {
+    transition: 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+  }
+  .front,
+  .back {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .front {
+    z-index: 2;
+    transform: rotateY(0deg);
+  }
+  .back {
+    transform: rotateY(180deg);
+  }
+}
+

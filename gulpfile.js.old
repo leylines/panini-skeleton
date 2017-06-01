@@ -1,0 +1,196 @@
+//
+// Gulpfile
+//
+var path = require('path');
+var gulp = require('gulp');
+var environments = require('gulp-environments');
+var sass = require('gulp-sass');
+var sourcemaps = require('gulp-sourcemaps');
+var postcss = require('gulp-postcss');
+var autoprefixer = require('autoprefixer');
+var mq4HoverShim = require('mq4-hover-shim');
+var rimraf = require('rimraf').sync;
+var cssnano = require('gulp-cssnano');
+var scsslint = require('gulp-scss-lint');
+var cache = require('gulp-cached');
+var webpack = require('webpack');
+var panini = require('panini');
+var validator = require('gulp-html');
+var bootlint  = require('gulp-bootlint');
+var browser = require('browser-sync');
+var imagemin = require('gulp-imagemin');
+var pngquant = require('imagemin-pngquant');
+
+var development = environments.development;
+var production = environments.production;
+var port = process.env.SERVER_PORT || 4444;
+
+// Starts a BrowerSync instance
+gulp.task('server', ['build'], function(){
+  browser.init({server: './_site', port: port});
+});
+
+// Watch files for changes
+gulp.task('watch', function() {
+  gulp.watch('scss/**/*', ['compile-sass', browser.reload]);
+  gulp.watch('html/pages/**/*', ['compile-html']);
+  gulp.watch(['html/{layouts,includes,helpers,data}/**/*'], ['compile-html:reset','compile-html']);
+});
+
+// Erases the dist folder
+gulp.task('clean', function() {
+  rimraf('_site');
+});
+
+// Copy assets
+gulp.task('copy', function() {
+  gulp.src(['assets/**/*']).pipe(gulp.dest('_site'));
+});
+
+gulp.task('compile-html', function(cb) {
+  gulp.src('html/pages/**/*.html')
+    .pipe(panini({
+      root: 'html/pages/',
+      layouts: 'html/layouts/',
+      partials: 'html/includes/',
+      helpers: 'html/helpers/',
+      data: development() ? 'html/data/development' : 'html/data/production'
+     }))
+    .pipe(gulp.dest('_site'));
+    //.on('finish', browser.reload);
+    cb();
+});
+
+var sassOptions = {
+  sourceComments  : production() ? false : true,
+  errLogToConsole : true,
+  outputStyle     : 'expanded',
+  includePaths    : ['./node_modules/bootstrap/scss', './node_modules/font-awesome/scss', './node_modules']
+};
+
+gulp.task('compile-sass', function () {
+  var processors = [
+    mq4HoverShim.postprocessorFor({ hoverSelectorPrefix: '.bs-true-hover ' }),
+    autoprefixer({ cascade: true })
+  ];
+  return gulp.src(path.join(__dirname, './scss', '*.scss'))
+    .pipe(development(sourcemaps.init()))
+    .pipe(sass(sassOptions).on('error', sass.logError))
+    .pipe(postcss(processors))
+    .pipe(production(cssnano()))
+    .pipe(development(sourcemaps.write()))
+    .pipe(gulp.dest('./_site/css/'));
+});
+
+gulp.task('validate-html',['compile-html'], function() {
+  gulp.src('_site/**/*.html')
+    .pipe(validator())
+    .pipe(bootlint());
+});
+
+gulp.task('scss-lint', function() {
+  return gulp.src('scss/**/*.scss')
+    .pipe(scsslint({'config': 'bootstrap/scss/.scss-lint.yml'}))
+    .pipe(cache('scsslint'))
+    .pipe(scsslint());
+});
+
+gulp.task('images', function() {
+  return gulp.src('images/*')
+    .pipe(imagemin({
+      progressive: true,
+      svgoPlugins: [
+        {remiveViewBox: false},
+        {cleanupIDs: false}
+      ],
+      use: [pngquant()]
+    }))
+    .pipe(gulp.dest('_site/images'))
+});
+
+gulp.task('fonts', function() {
+  return gulp.src('node_modules/font-awesome/fonts/*')
+    .pipe(gulp.dest('_site/fonts'))
+})
+
+gulp.task('webpack', function(callback) {
+  var webpackPlugins = [
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery",
+      Tether: "tether",
+      "window.Tether": "tether",
+      Alert: "exports-loader?Alert!bootstrap/js/dist/alert",
+      Button: "exports-loader?Button!bootstrap/js/dist/button",
+      Carousel: "exports-loader?Carousel!bootstrap/js/dist/carousel",
+      Collapse: "exports-loader?Collapse!bootstrap/js/dist/collapse",
+      Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
+      Modal: "exports-loader?Modal!bootstrap/js/dist/modal",
+      Popover: "exports-loader?Popover!bootstrap/js/dist/popover",
+      Scrollspy: "exports-loader?Scrollspy!bootstrap/js/dist/scrollspy",
+      Tab: "exports-loader?Tab!bootstrap/js/dist/tab",
+      Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
+      Util: "exports-loader?Util!bootstrap/js/dist/util",
+      "jquery.easing": "exports-loader?jquery.easing!/jquery.easing/jquery.easing.js",
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'commons.chunk.js'
+    }),
+    new webpack.DefinePlugin({
+      "process.env": production() ? 'production' : 'development'
+    })
+  ];
+
+  if (production) {
+    webpackPlugins.push(new webpack.optimize.UglifyJsPlugin({minimize: true}));
+  }
+  var webpackConfig = {
+    context: path.join(__dirname, './scripts'),
+    entry: {
+      app: './app.js',
+      vendor: ['jquery', 'jquery.easing', 'tether', 'bootstrap']
+    },
+    output: {
+      path: path.join(__dirname, './_site/js'),
+      filename: 'app.js'
+    },
+    resolve: {
+      modules: [__dirname, 'node_modules'],
+      extensions: ['*','.js']
+    },
+    module: {
+      loaders: [
+        {
+          test: /\.jsx?$/,
+          exclude: /(node_modules)/,
+          loader: 'babel-loader',
+          query: {
+            presets: ['es2015']
+          }
+        },
+        {
+          test: /bootstrap[\/\\]dist[\/\\]js[\/\\]umd[\/\\]/,
+          loader: 'imports-loader?jQuery=jquery'
+        },
+      ]
+    },
+    plugins: webpackPlugins
+  };
+
+  webpack(webpackConfig, function(err, stats) {
+    if (err) {
+      return callback(err);
+    }
+
+    callback();
+  });
+});
+
+gulp.task('set-development', development.task);
+gulp.task('set-production', production.task);
+gulp.task('test',['scss-lint','validate-html']);
+gulp.task('build', ['clean','copy','webpack','compile-sass','compile-html','images','fonts']);
+gulp.task('default', ['set-development','server', 'watch']);
+gulp.task('deploy', ['set-production','server', 'watch']);

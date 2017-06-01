@@ -1,0 +1,81 @@
+const path = require('path');
+const webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+module.exports = {
+
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'commons.chunk.js',
+      minChunks: 2,
+    }),
+    new ExtractTextPlugin({
+      filename: '_wepback_site/css/[name].bundle.css',
+      allChunks: true
+    }),
+  ],
+
+  context: path.join(__dirname),
+  entry: {
+    app: ['./scripts/app.js'], 
+    scss: ['./scss/app.scss', './scss/vendor.scss'],
+    vendor: ['jquery', 'jquery.easing', 'tether', 'bootstrap']
+  },
+  output: {
+    path: path.join(__dirname, './_wepback_site/js'),
+    filename: '[name].bundle.js',
+  },
+  resolve: {
+    alias: {},
+    modules: ['node_modules']
+  },
+  //devtool: devMode ? 'cheap-inline-source-map' : 'source-map',
+  devtool: 'source-map',
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+          presets: ['es2015']
+        }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader','css-loader', 'postcss-loader']
+      },
+      {
+        test: /\.(scss|sass)$/,
+        include: path.resolve(__dirname, 'node_modules'),
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                importLoaders: 3,
+                sourceMap: true,
+              },
+            }, {
+              loader: 'postcss-loader',
+              options: {
+                plugins: () => [ require('autoprefixer')],
+                sourceMap: true,
+              },
+            }, {
+              loader: 'sass-loader',
+              options: {
+                // outputStyle: 'expanded',
+                sourceMap: true,
+                // sourceMapContents: true,
+              },
+            },
+          ]
+        })
+      },
+    ]
+  }
+};

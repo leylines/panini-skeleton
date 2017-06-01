@@ -1,0 +1,78 @@
+{
+  "name": "panini-skeleton",
+  "version": "0.0.1",
+  "description": "Bootstrap 4 Skeleton with gulp and panini",
+  "main": "gulpfile.js",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "IE >= 9"
+  ],
+  "dependencies": {
+    "bootstrap": "^4.0.0-alpha.6",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1",
+    "jquery.easing": "^1.4.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.1",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "browser-sync": "^2.18.12",
+    "copy-webpack-plugin": "^4.0.1",
+    "css-loader": "^0.28.4",
+    "exports-loader": "^0.6.4",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.1",
+    "gulp": "^3.9.1",
+    "gulp-bootlint": "^0.8.1",
+    "gulp-cached": "^1.1.1",
+    "gulp-cli": "^1.3.0",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-environments": "^0.1.2",
+    "gulp-html": "^0.4.6",
+    "gulp-imagemin": "^3.2.0",
+    "gulp-postcss": "^7.0.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-scss-lint": "^0.4.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "imagemin-pngquant": "^5.0.1",
+    "mq4-hover-shim": "^0.3.0",
+    "node-sass": "^4.5.3",
+    "panini": "^1.4.0",
+    "path": "^0.12.7",
+    "postcss-cssnext": "^2.11.0",
+    "postcss-import": "^10.0.0",
+    "postcss-loader": "^2.0.5",
+    "rimraf": "^2.6.1",
+    "sass-loader": "^6.0.5",
+    "script-loader": "^0.7.0",
+    "style-loader": "^0.18.1",
+    "sugarss": "^1.0.0",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5"
+  },
+  "scripts": {
+    "build": "gulp deploy",
+    "start": "gulp",
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leylines/panini-skeleton.git"
+  },
+  "keywords": [
+    "bootstrap",
+    "panini",
+    "gulp",
+    "sass"
+  ],
+  "author": "Joerg Roth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leylines/panini-skeleton/issues"
+  },
+  "homepage": "https://github.com/leylines/panini-skeleton#readme"
+}

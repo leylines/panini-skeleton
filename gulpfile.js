@@ -28,7 +28,7 @@ var port = process.env.SERVER_PORT || 4444;
 
 // Starts a BrowerSync instance
 gulp.task('server', ['build'], function(){
-  browser.init({server: './_site', port: port});
+  browser.init({server: './doc', port: port});
 });
 
 // Watch files for changes
@@ -40,7 +40,7 @@ gulp.task('watch', function() {
 
 // Erases the dist folder
 gulp.task('clean', function() {
-  rimraf('_site');
+  rimraf('doc');
 });
 
 gulp.task('compile-html', function(cb) {
@@ -52,7 +52,7 @@ gulp.task('compile-html', function(cb) {
       helpers: 'html/helpers/',
       data: development() ? 'html/data/development' : 'html/data/production'
      }))
-    .pipe(gulp.dest('_site'));
+    .pipe(gulp.dest('doc'));
     //.on('finish', browser.reload);
     cb();
 });
@@ -63,7 +63,7 @@ gulp.task('compile-html:reset', function(done) {
 });
 
 gulp.task('validate-html',['compile-html'], function() {
-  gulp.src('_site/**/*.html')
+  gulp.src('doc/**/*.html')
     .pipe(validator())
     .pipe(bootlint());
 });
@@ -78,7 +78,7 @@ gulp.task('images', function() {
       ],
       use: [pngquant()]
     }))
-    .pipe(gulp.dest('_site/images'))
+    .pipe(gulp.dest('doc/images'))
 });
 
 
@@ -123,7 +123,7 @@ gulp.task('webpack', function(callback) {
     },
 
     output: {
-      path: path.join(__dirname, '_site/js'),
+      path: path.join(__dirname, 'doc/js'),
       filename: '[name].js'
     },
 

@@ -11,13 +11,13 @@ module.exports = {
       'script-loader!tether/dist/js/tether.js',
       'script-loader!bootstrap/dist/js/bootstrap.js'
     ],
-    site: './scss/app.scss',
-    bootstrapCSS: [
-      'script-loader!bootstrap/scss/bootstrap.scss'
-    ],
-    faCSS: [
-      'script-loader!font-awesome/scss/font-awesome.scss'
-    ],
+    site: './scss/site.scss',
+//    bootstrapCSS: [
+//      'script-loader!bootstrap/scss/bootstrap.scss'
+//    ],
+//    faCSS: [
+//      'script-loader!font-awesome/scss/font-awesome.scss'
+//    ],
   },
 
   output: {
@@ -45,19 +45,31 @@ module.exports = {
               options: {
                 modules: true,
                 importLoaders: 3,
-                sourceMap: false,
+                sourceMap: true,
               },
             },
             {
               loader: 'postcss-loader',
               options: {
-                sourceMap: false,
+                sourceMap: true,
+                plugins: (loader) => [
+                  require('postcss-import')({ root: loader.resourcePath }),
+                  require('postcss-cssnext')(),
+                  require('cssnano')()
+                ],
+                config: {
+                  path: './postcss.config.js',
+                  ctx: {
+                    'cssnext': {},
+                    'cssnano': {},
+                  }
+                }
               },
             },
             {
               loader: 'sass-loader',
               options: {
-                sourceMap: false,
+                sourceMap: true,
               },
             },
           ],
@@ -71,6 +83,10 @@ module.exports = {
   },
 
   plugins: [
+
+    new webpack.LoaderOptionsPlugin({
+      debug: true
+    }),
 
     new webpack.ProvidePlugin({
       '$': 'jquery',

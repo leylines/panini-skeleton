@@ -1,23 +1,17 @@
 //
 // Gulpfile
 //
-var path = require('path');
-var gulp = require('gulp');
-var environments = require('gulp-environments');
-var sass = require('gulp-sass');
-var sourcemaps = require('gulp-sourcemaps');
-var postcss = require('gulp-postcss');
-var autoprefixer = require('autoprefixer');
-var mq4HoverShim = require('mq4-hover-shim');
-var rimraf = require('rimraf').sync;
-var cache = require('gulp-cached');
-var webpack = require('webpack');
-var panini = require('panini');
-var validator = require('gulp-html');
 var bootlint  = require('gulp-bootlint');
 var browser = require('browser-sync');
+var environments = require('gulp-environments');
+var gulp = require('gulp');
 var imagemin = require('gulp-imagemin');
+var panini = require('panini');
+var path = require('path');
 var pngquant = require('imagemin-pngquant');
+var rimraf = require('rimraf');
+var validator = require('gulp-html');
+var webpack = require('webpack');
 
 ExtractTextPlugin = require("extract-text-webpack-plugin");
 ExtractCSS = new ExtractTextPlugin("../css/[name].css");
@@ -25,6 +19,7 @@ ExtractCSS = new ExtractTextPlugin("../css/[name].css");
 var development = environments.development;
 var production = environments.production;
 var port = process.env.SERVER_PORT || 4444;
+var destination = 'docs';
 
 // Starts a BrowerSync instance
 gulp.task('server', ['build'], function(){
@@ -39,8 +34,8 @@ gulp.task('watch', function() {
 });
 
 // Erases the dist folder
-gulp.task('clean', function() {
-  rimraf('docs');
+gulp.task('clean', function(cb) {
+  rimraf(destination, cb);
 });
 
 gulp.task('compile-html', function(cb) {
@@ -52,7 +47,7 @@ gulp.task('compile-html', function(cb) {
       helpers: 'html/helpers/',
       data: development() ? 'html/data/development' : 'html/data/production'
      }))
-    .pipe(gulp.dest('docs'));
+    .pipe(gulp.dest(destination));
     //.on('finish', browser.reload);
     cb();
 });

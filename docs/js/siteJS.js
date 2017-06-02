@@ -1,1 +1,11 @@
-webpackJsonp([3],{7:function(o,n,e){"use strict";var t=e(!function(){var o=new Error('Cannot find module "moment"');throw o.code="MODULE_NOT_FOUND",o}()),r=function(o){return o&&o.__esModule?o:{default:o}}(t),u=(0,r.default)().format("MMMM Do YYYY, h:mm:ss a");console.log(u)}},[7]);
+webpackJsonp([3],{
+
+/***/ 7:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/***/ })
+
+},[7]);

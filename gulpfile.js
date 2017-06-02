@@ -16,7 +16,7 @@ var webpack = require('webpack');
 var development = environments.development;
 var production = environments.production;
 var port = process.env.SERVER_PORT || 4444;
-var destination = 'docs';
+var destination = 'html';
 var webpackConfig = require("./config/webpack.config.js");
 
 // Starts a BrowerSync instance
@@ -27,8 +27,8 @@ gulp.task('server', ['build'], function(){
 // Watch files for changes
 gulp.task('watch', function() {
   gulp.watch('scss/**/*', ['webpack', browser.reload]);
-  gulp.watch('source/pages/**/*', ['compile-html']);
-  gulp.watch(['source/{layouts,partials,helpers,data}/**/*'], ['compile-html:reset','compile-html']);
+  gulp.watch('source/pages/**/*', ['compile-html', 'webpack']);
+  gulp.watch(['source/{layouts,partials,helpers,data}/**/*'], ['compile-html:reset', 'compile-html', 'webpack']);
 });
 
 // Erases the dist folder
@@ -96,7 +96,6 @@ gulp.task('set-development', development.task);
 gulp.task('set-production', production.task);
 gulp.task('test',['scss-lint','validate-html']);
 gulp.task('clean',['clean']);
-gulp.task('build', ['webpack', 'compile-html']);
-//gulp.task('build', ['webpack', 'compile-html', 'images']);
+gulp.task('build', ['compile-html', 'webpack']);
 gulp.task('default', ['set-development', 'server', 'watch']);
 gulp.task('deploy', ['set-production', 'server', 'watch']);

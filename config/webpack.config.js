@@ -2,6 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ExtractCSS = new ExtractTextPlugin("../css/[name].css");
+var glob = require('glob');
 
 module.exports = {
 
@@ -15,6 +16,7 @@ module.exports = {
       'script-loader!font-awesome/scss/font-awesome.scss'
     ],
     siteCSS: './scss/site.scss',
+    siteHTML: glob.sync("./html/*.html")
   },
 
   output: {
@@ -119,6 +121,30 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot|ttf)$/,
         use: 'url-loader?limit=100000&name=../fonts/[name].[ext]'
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+               name: "../[name].[ext]",
+            },
+          },
+          {
+            loader: "extract-loader",
+          },
+          {
+            loader: "html-loader",
+            options: {
+              minimize: false,
+              removeComments: false,
+              collapseWhitespace: false
+              //attrs: ["img:src", "link:href"],
+              //interpolate: true,
+            },
+          },
+        ],
       }
     ]
   }

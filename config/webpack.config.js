@@ -120,6 +120,7 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg)$/,
+        exclude: /images/,
         use: 'url-loader?limit=100000&name=../fonts/[name].[ext]'
       },
       {

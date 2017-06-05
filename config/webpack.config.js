@@ -1,5 +1,5 @@
 var webpack = require('webpack');
-var path = require('path');
+var commonChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ExtractCSS = new ExtractTextPlugin("../css/[name].css");
 var glob = require('glob');
@@ -20,7 +20,6 @@ module.exports = {
   },
 
   output: {
-    path: path.join(__dirname, '../docs/js'),
     filename: '[name].js'
   },
 
@@ -39,7 +38,7 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     }),
 
-    new webpack.optimize.CommonsChunkPlugin({
+    new commonChunkPlugin({
       name: 'vendorJS',
       filename: 'commons.chunk.js'
     }),
@@ -65,13 +64,13 @@ module.exports = {
               options: {
                 //modules: true,
                 importLoaders: 3,
-                sourceMap: false,
+                sourceMap: true,
               },
             },
             {
               loader: 'postcss-loader',
               options: {
-                sourceMap: false,
+                sourceMap: true,
                 plugins: (loader) => [
                   //require('postcss-import')({ root: loader.resourcePath }),
                   //require('postcss-cssnext')(),
@@ -91,7 +90,7 @@ module.exports = {
             {
               loader: 'sass-loader',
               options: {
-                sourceMap: false,
+                sourceMap: true,
               },
             },
           ],
@@ -99,7 +98,8 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        loaders: ['file-loader?name=../images/[name].[ext]', {
+        exclude: /node_modules/,
+        loaders: ['file-loader?name=../[path][name].[ext]', {
           loader: 'image-webpack-loader',
           query: {
             mozjpeg: {
@@ -119,7 +119,7 @@ module.exports = {
         }],
       },
       {
-        test: /\.(woff|woff2|eot|ttf)$/,
+        test: /\.(woff|woff2|eot|ttf|svg)$/,
         use: 'url-loader?limit=100000&name=../fonts/[name].[ext]'
       },
       {

@@ -4,27 +4,28 @@
 
       <div class="col-xl-6">
         <div class="featured-image">
-          <img src="/images/naturapraxis.jpg" alt="praxis">
+          <img src="/images/naturapraxis.jpg" alt="Praxis">
           <div class="image-border"></div>
         </div>
       </div>
 
       <div class="col-xl-7 col-sm-12 overflow-box pull-right">
         <div class="box diffuse-shadow class bg-secondary">
-
           <div class="content">
             <h2 class="section-heading text-left">{{sections.section-1.name}}</h2>
             <p class="text-left">
-              {{sections.section-1.content}}
+              {{#each sections.section-1.content}}
+                {{ this }}
+                {{#ifCond (inc @index) '<' ../sections.section-1.content.length}}
+                  <br/>
+                {{/ifCond}}
+              {{/each}}
             </p>
           </div>
-
           <div class="bottom-gradient"></div>
-
         </div>
       </div>
 
     </div>
   </div>
 </section>
-

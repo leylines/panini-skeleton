@@ -5,13 +5,12 @@ var bootlint  = require('gulp-bootlint');
 var browser = require('browser-sync');
 var environments = require('gulp-environments');
 var gulp = require('gulp');
-var imagemin = require('gulp-imagemin');
 var panini = require('panini');
 var path = require('path');
-var pngquant = require('imagemin-pngquant');
 var rimraf = require('rimraf');
 var validator = require('gulp-html');
-var webpack = require('webpack');
+var webpack = require('webpack-stream');
+var named = require('vinyl-named');
 
 var development = environments.development;
 var production = environments.production;
@@ -21,12 +20,14 @@ var webpackConfig = require("./config/webpack.config.js");
 
 // Starts a BrowerSync instance
 gulp.task('server', ['build'], function(){
-  browser.init({server: './docs', port: port});
+  browser.init({server: './build', port: port});
 });
 
 // Watch files for changes
 gulp.task('watch', function() {
+  gulp.watch('images/**/*', ['webpack', browser.reload]);
   gulp.watch('scss/**/*', ['webpack', browser.reload]);
+  gulp.watch('scripts/**/*', ['webpack', browser.reload]);
   gulp.watch('source/pages/**/*', ['compile-html', 'webpack']);
   gulp.watch(['source/{layouts,partials,helpers,data}/**/*'], ['compile-html:reset', 'compile-html', 'webpack']);
 });
@@ -57,44 +58,26 @@ gulp.task('compile-html:reset', function(done) {
 });
 
 gulp.task('validate-html',['compile-html'], function() {
-  gulp.src('docs/**/*.html')
+  gulp.src('html/**/*.html')
     .pipe(validator())
-    .pipe(bootlint());
 });
 
-gulp.task('images', function() {
-  return gulp.src('images/*')
-    .pipe(imagemin({
-      progressive: true,
-      svgoPlugins: [
-        {remiveViewBox: false},
-        {cleanupIDs: false}
-      ],
-      use: [pngquant()]
-    }))
-    .pipe(gulp.dest('docs/images'))
-});
-
-
-gulp.task('webpack', function(callback) {
+gulp.task('webpack', function() {
 
 //  if (production) {
 //    webpackPlugins.push(new webpack.optimize.UglifyJsPlugin({minimize: true}));
 //  }
 
-  webpack(webpackConfig, function(err, stats) {
-    if (err) {
-      return callback(err);
-    }
-
-    callback();
-  });
-
+  return gulp.src('scripts/site.js')
+    .pipe(named())
+    .pipe(webpack(webpackConfig, require('webpack')))
+    .pipe(gulp.dest('build/js'));
+  
 });
 
 gulp.task('set-development', development.task);
 gulp.task('set-production', production.task);
-gulp.task('test',['scss-lint','validate-html']);
+gulp.task('test',['validate-html']);
 gulp.task('clean',['clean']);
 gulp.task('build', ['compile-html', 'webpack']);
 gulp.task('default', ['set-development', 'server', 'watch']);

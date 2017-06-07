@@ -8,6 +8,10 @@
 @import "section-5";
 @import "footer";
 
+:fullscreen a {
+    display: flex
+}
+
 *, *::before, *::after
 {
   box-sizing: border-box;

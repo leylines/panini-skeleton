@@ -9,18 +9,16 @@ var panini = require('panini');
 var path = require('path');
 var rimraf = require('rimraf');
 var validator = require('gulp-html');
-var webpack = require('webpack-stream');
 var named = require('vinyl-named');
 
 var development = environments.development;
 var production = environments.production;
 var port = process.env.SERVER_PORT || 4444;
-var destination = 'html';
-var webpackConfig = require("./config/webpack.config.js");
+var destination = 'source/html';
 
 // Starts a BrowerSync instance
 gulp.task('server', ['build'], function(){
-  browser.init({server: './build', port: port});
+  browser.init({server: './www', port: port});
 });
 
 // Watch files for changes
@@ -33,11 +31,11 @@ gulp.task('watch', function() {
 });
 
 // Erases the dist folder
-gulp.task('clean', function(cb) {
-  rimraf(destination, cb);
+gulp.task('clean', function(done) {
+  rimraf(destination, done);
 });
 
-gulp.task('compile-html', function(cb) {
+gulp.task('compile-html', function(done) {
   gulp.src('source/pages/**/*.html')
     .pipe(panini({
       root: 'source/pages',
@@ -49,7 +47,7 @@ gulp.task('compile-html', function(cb) {
      }))
     .pipe(gulp.dest(destination));
     //.on('finish', browser.reload);
-    cb();
+    done();
 });
 
 gulp.task('compile-html:reset', function(done) {
@@ -62,16 +60,17 @@ gulp.task('validate-html',['compile-html'], function() {
     .pipe(validator())
 });
 
-gulp.task('webpack', function() {
+gulp.task('webpack', function(done) {
 
 //  if (production) {
 //    webpackPlugins.push(new webpack.optimize.UglifyJsPlugin({minimize: true}));
 //  }
 
-  return gulp.src('scripts/site.js')
-    .pipe(named())
-    .pipe(webpack(webpackConfig, require('webpack')))
-    .pipe(gulp.dest('build/js'));
+    var runWebpack = require('./buildprocess/runWebpack.js');
+    var webpack = require('webpack');
+    var webpackConfig = production() ? require("./buildprocess/webpack.config.js")(false) : require("./buildprocess/webpack.config.js")(true);
+
+    runWebpack(webpack, webpackConfig, done);
   
 });
 

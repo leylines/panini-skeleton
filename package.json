@@ -30,6 +30,7 @@
     "gulp-bootlint": "^0.8.1",
     "gulp-environments": "^0.1.2",
     "gulp-html": "^0.4.6",
+    "gulp-util": "^3.0.8",
     "html-loader": "^0.4.5",
     "image-webpack-loader": "^3.3.1",
     "node-sass": "^4.5.3",
@@ -46,8 +47,7 @@
     "sugarss": "^1.0.0",
     "url-loader": "^0.5.8",
     "vinyl-named": "^1.1.0",
-    "webpack": "^2.6.1",
-    "webpack-stream": "^3.2.0"
+    "webpack": "^2.6.1"
   },
   "scripts": {
     "build": "gulp deploy",

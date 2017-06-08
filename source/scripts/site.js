@@ -1,3 +1,6 @@
+require('../html/index.html');
+import styles from '../scss/site.scss';
+
 (function($) {
     "use strict"; // Start of use strict
 

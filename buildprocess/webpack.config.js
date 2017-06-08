@@ -24,7 +24,7 @@ module.exports = function(devMode) {
         'script-loader!font-awesome/scss/font-awesome.scss'
       ],
       siteCSS: '../source/scss/site.scss',
-      siteHTML: '../source/html/index.html'
+      //siteHTML: '../source/html/index.html'
     },
 
     output: {

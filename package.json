@@ -9,7 +9,7 @@
     "IE >= 9"
   ],
   "dependencies": {
-    "bootstrap": "^4.0.0-alpha.6",
+    "bootstrap": "github:twbs/bootstrap#v4-dev",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
     "jquery.easing": "^1.4.1"
@@ -46,13 +46,14 @@
     "style-loader": "^0.18.2",
     "sugarss": "^1.0.0",
     "url-loader": "^0.5.8",
-    "vinyl-named": "^1.1.0",
-    "webpack": "^2.6.1"
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5"
   },
   "scripts": {
     "build": "gulp deploy",
-    "start": "gulp",
-    "test": "gulp test"
+    "start": "./node_modules/.bin/gulp",
+    "test": "gulp test",
+    "hot": "./node_modules/.bin/webpack-dev-server --inline --config buildprocess/webpack.config.js --host 0.0.0.0"
   },
   "repository": {
     "type": "git",

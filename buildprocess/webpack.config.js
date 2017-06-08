@@ -2,12 +2,12 @@
 
 /*global require*/
 
-var webpack = require('webpack');
-var commonChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var ExtractCSS = new ExtractTextPlugin("css/[name].css");
-var glob = require('glob');
-var path = require('path');
+const webpack = require('webpack');
+const commonChunkPlugin = webpack.optimize.CommonsChunkPlugin;
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const glob = require('glob');
+const path = require('path');
 
 module.exports = function(devMode) {
   var config = {
@@ -17,14 +17,6 @@ module.exports = function(devMode) {
     entry: {
       vendorJS: ['jquery', 'jquery.easing', 'tether', 'bootstrap'],
       siteJS: '../source/scripts/site.js',
-      bootstrapCSS: [
-        'script-loader!bootstrap/scss/bootstrap.scss'
-      ],
-      faCSS: [
-        'script-loader!font-awesome/scss/font-awesome.scss'
-      ],
-      siteCSS: '../source/scss/site.scss',
-      //siteHTML: '../source/html/index.html'
     },
 
     output: {
@@ -42,7 +34,7 @@ module.exports = function(devMode) {
         "window.Tether": "tether"
       }),
 
-      ExtractCSS,
+      new ExtractTextPlugin('css/siteCSS.css'),
 
       new webpack.DefinePlugin({
         'process.env': {
@@ -80,7 +72,8 @@ module.exports = function(devMode) {
               {
                 loader: 'css-loader',
                 options: {
-                  //modules: true,
+                  modules: false,
+                  localIdentName: '[name]__[local]___[hash:base64:5]',
                   importLoaders: 3,
                   sourceMap: true,
                 },
@@ -138,9 +131,9 @@ module.exports = function(devMode) {
           }],
         },
         {
-          test: /\.(woff|woff2|eot|ttf|svg)$/i,
+          test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
           exclude: /images/,
-          use: 'url-loader?limit=100000&name=fonts/[name].[ext]'
+          use: 'file-loader?name=fonts/[name].[ext]'
         },
         {
           test: /\.html$/i,

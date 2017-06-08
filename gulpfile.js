@@ -5,11 +5,12 @@ var bootlint  = require('gulp-bootlint');
 var browser = require('browser-sync');
 var environments = require('gulp-environments');
 var gulp = require('gulp');
+var gutil = require('gulp-util');
 var panini = require('panini');
 var path = require('path');
 var rimraf = require('rimraf');
 var validator = require('gulp-html');
-var named = require('vinyl-named');
+var WebpackDevServer = require('webpack-dev-server');
 
 var development = environments.development;
 var production = environments.production;
@@ -23,9 +24,9 @@ gulp.task('server', ['build'], function(){
 
 // Watch files for changes
 gulp.task('watch', function() {
-  gulp.watch('images/**/*', ['webpack', browser.reload]);
-  gulp.watch('scss/**/*', ['webpack', browser.reload]);
-  gulp.watch('scripts/**/*', ['webpack', browser.reload]);
+  gulp.watch('source/images/**/*', ['webpack', browser.reload]);
+  gulp.watch('source/scss/**/*', ['webpack', browser.reload]);
+  gulp.watch('source/scripts/**/*', ['webpack', browser.reload]);
   gulp.watch('source/pages/**/*', ['compile-html', 'webpack']);
   gulp.watch(['source/{layouts,partials,helpers,data}/**/*'], ['compile-html:reset', 'compile-html', 'webpack']);
 });
@@ -72,6 +73,30 @@ gulp.task('webpack', function(done) {
 
     runWebpack(webpack, webpackConfig, done);
   
+});
+
+gulp.task("webpack-dev-server", function(callback) {
+
+    var webpack = require('webpack');
+    var webpackConfig = require("./buildprocess/webpack.config.js")(true);
+    var myConfig = Object.create(webpackConfig);
+
+    myConfig.devtool = "eval";
+    //myConfig.debug = true;
+
+    // Start a webpack-dev-server
+    console.log("PATH: " + myConfig.output.publicPath);
+
+    new WebpackDevServer(webpack(myConfig), {
+        contentBase: path.join(__dirname, "www"),
+        publicPath: "/" + myConfig.output.publicPath,
+        stats: {
+            colors: true
+        }
+    }).listen(3000, "localhost", function(err) {
+        if(err) throw new gutil.PluginError("webpack-dev-server", err);
+        gutil.log("[webpack-dev-server]", "http://localhost:3000/webpack-dev-server/index.html");
+    });
 });
 
 gulp.task('set-development', development.task);

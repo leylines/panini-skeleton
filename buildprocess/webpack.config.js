@@ -22,7 +22,7 @@ module.exports = function(devMode, project) {
     output: {
       filename: 'js/[name].js',
       path: path.join(__dirname, "..", "www", ".", project),
-      publicPath: "/"
+      publicPath: ""
     },
 
     plugins: [

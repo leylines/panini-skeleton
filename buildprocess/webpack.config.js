@@ -9,19 +9,19 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const glob = require('glob');
 const path = require('path');
 
-module.exports = function(devMode) {
+module.exports = function(devMode, project) {
   var config = {
 
-    context: path.resolve(__dirname, "..", "www"),
+    context: path.resolve(__dirname, "..", "www", ".", project),
 
     entry: {
-      vendorJS: ['jquery', 'jquery.easing', 'tether', 'bootstrap'],
-      siteJS: '../source/scripts/site.js',
+      vendorJS: ['jquery', 'jquery.easing', 'tether', 'bootstrap', 'scrollreveal'],
+      siteJS: '../../source/' + project + '/scripts/site.js',
     },
 
     output: {
       filename: 'js/[name].js',
-      path: path.join(__dirname, "..", "www/"),
+      path: path.join(__dirname, "..", "www", ".", project),
       publicPath: "/"
     },
 
@@ -31,7 +31,9 @@ module.exports = function(devMode) {
         'jQuery': 'jquery',
         "window.jQuery": "jquery",
         Tether: "tether",
-        "window.Tether": "tether"
+        "window.Tether": "tether",
+        ScrollReveal: "scrollreveal",
+        "window.sr": "scrollreveal"
       }),
 
       new ExtractTextPlugin('css/siteCSS.css'),
@@ -109,9 +111,9 @@ module.exports = function(devMode) {
         },
         {
           test: /\.(jpe?g|png|gif|svg)$/i,
-          include: /images/,
+          include: /img/,
           exclude: /node_modules/,
-          use: ['file-loader?name=images/[hash].[ext]', {
+          use: ['file-loader?name=img/[hash].[ext]', {
             loader: 'image-webpack-loader',
             query: {
               mozjpeg: {
@@ -132,12 +134,12 @@ module.exports = function(devMode) {
         },
         {
           test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-          exclude: /images/,
+          exclude: /img/,
           use: 'file-loader?name=fonts/[name].[ext]'
         },
         {
           test: /\.html$/i,
-          include: path.resolve(__dirname, '..', 'source', 'html'),
+          include: path.resolve(__dirname, '..', 'source', project, 'html'),
           use: [
             {
               loader: "file-loader",

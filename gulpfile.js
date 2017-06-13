@@ -14,21 +14,25 @@ var WebpackDevServer = require('webpack-dev-server');
 
 var development = environments.development;
 var production = environments.production;
+var project = gutil.env.project || 'naturapraxis';
 var port = process.env.SERVER_PORT || 4444;
-var destination = 'source/html';
+var source = 'source/' + project;
+var destination = 'source/' + project + '/html';
+
+gutil.log("Project is: " + project);
 
 // Starts a BrowerSync instance
 gulp.task('server', ['build'], function(){
-  browser.init({server: './www', port: port});
+  browser.init({server: './www/' + project, port: port});
 });
 
 // Watch files for changes
 gulp.task('watch', function() {
-  gulp.watch('source/images/**/*', ['webpack', browser.reload]);
-  gulp.watch('source/scss/**/*', ['webpack', browser.reload]);
-  gulp.watch('source/scripts/**/*', ['webpack', browser.reload]);
-  gulp.watch('source/pages/**/*', ['compile-html', 'webpack']);
-  gulp.watch(['source/{layouts,partials,helpers,data}/**/*'], ['compile-html:reset', 'compile-html', 'webpack']);
+  gulp.watch(source + '/img/**/*', ['webpack', browser.reload]);
+  gulp.watch(source + '/scss/**/*', ['webpack', browser.reload]);
+  gulp.watch(source + '/scripts/**/*', ['webpack', browser.reload]);
+  gulp.watch(source + '/pages/**/*', ['compile-html', 'webpack']);
+  gulp.watch([source + '/{layouts,partials,helpers,data}/**/*'], ['compile-html:reset', 'compile-html', 'webpack']);
 });
 
 // Erases the dist folder
@@ -37,13 +41,13 @@ gulp.task('clean', function(done) {
 });
 
 gulp.task('compile-html', function(done) {
-  gulp.src('source/pages/**/*.html')
+  gulp.src(source + '/pages/**/*.html')
     .pipe(panini({
-      root: 'source/pages',
-      layouts: 'source/layouts',
-      partials: 'source/partials',
-      helpers: 'source/helpers',
-      data: 'source/data'
+      root: source + '/pages',
+      layouts: source + '/layouts',
+      partials: source + '/partials',
+      helpers: source + '/helpers',
+      data: source + '/data'
       //data: development() ? 'source/data/development' : 'source/data/production'
      }))
     .pipe(gulp.dest(destination));
@@ -57,7 +61,7 @@ gulp.task('compile-html:reset', function(done) {
 });
 
 gulp.task('validate-html',['compile-html'], function() {
-  gulp.src('html/**/*.html')
+  gulp.src(source + '/html/**/*.html')
     .pipe(validator())
 });
 
@@ -69,34 +73,10 @@ gulp.task('webpack', function(done) {
 
     var runWebpack = require('./buildprocess/runWebpack.js');
     var webpack = require('webpack');
-    var webpackConfig = production() ? require("./buildprocess/webpack.config.js")(false) : require("./buildprocess/webpack.config.js")(true);
+    var webpackConfig = production() ? require('./buildprocess/webpack.config.js')(false, project) : require('./buildprocess/webpack.config.js')(true, project);
 
     runWebpack(webpack, webpackConfig, done);
   
-});
-
-gulp.task("webpack-dev-server", function(callback) {
-
-    var webpack = require('webpack');
-    var webpackConfig = require("./buildprocess/webpack.config.js")(true);
-    var myConfig = Object.create(webpackConfig);
-
-    myConfig.devtool = "eval";
-    //myConfig.debug = true;
-
-    // Start a webpack-dev-server
-    console.log("PATH: " + myConfig.output.publicPath);
-
-    new WebpackDevServer(webpack(myConfig), {
-        contentBase: path.join(__dirname, "www"),
-        publicPath: "/" + myConfig.output.publicPath,
-        stats: {
-            colors: true
-        }
-    }).listen(3000, "localhost", function(err) {
-        if(err) throw new gutil.PluginError("webpack-dev-server", err);
-        gutil.log("[webpack-dev-server]", "http://localhost:3000/webpack-dev-server/index.html");
-    });
 });
 
 gulp.task('set-development', development.task);

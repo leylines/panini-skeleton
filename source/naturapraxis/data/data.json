@@ -6,10 +6,23 @@
   },
   "about": {
     "name": "Naturapraxis",
-    "content": [
-      "Es ist mir ein Anliegen, dass es ein miteinander Arbeiten an Ihrer Gesundheit ist, resourcen & lösungsorientiert.",
-      "Zusammen bestimmen wir den Weg um ihr gewünschtes Ziel zu erreichen.",
-      "Aus meinem breitem Wissen, aus der Schul- / Alternativmedizin und naturheilkundlichen Bereichen ist es mir eine Freude Sie zu begleiten, damit Ihr Körper, Geist und Seele wieder harmonieren."
+    "items": [
+      {
+        "name": "Standort",
+        "content": "Die Praxis liegt zentral in Zürich an der Weberstrasse."
+      },
+      {
+        "name": "Beratung",
+        "content": "Es ist mir ein Anliegen, dass es ein miteinander Arbeiten an Ihrer Gesundheit ist, resourcen & lösungsorientiert."
+      },
+      {
+        "name": "Wohlfühlen",
+        "content": "Zusammen bestimmen wir den Weg um ihr gewünschtes Ziel zu erreichen."
+      },
+      {
+        "name": "Behandlung",
+        "content": "Aus meinem breitem Wissen, aus der Schul- / Alternativmedizin und naturheilkundlichen Bereichen ist es mir eine Freude Sie zu begleiten, damit Ihr Körper, Geist und Seele wieder harmonieren."
+      }
     ]
   },
   "leitbild": {

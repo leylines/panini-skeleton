@@ -83,5 +83,10 @@
         }
       }
     }
+    &.navbar-shrink {
+      .navbar-brand {
+        float: left;
+      }
+    }
   }
 }

@@ -1,47 +1,27 @@
-<section id="about" class="theme-primary">
-  <div class="container">
-    <h2 class="section-heading">{{data.about.name}}</h2>
-    <div class="row">
-      <div class="col-md-6 col-sm-12 content">
-        <p>
-          {{#each data.about.content}}
-            {{ this }}
-            {{#ifCond (inc @index) '<' ../data.about.content.length}}
-              <br/>
-            {{/ifCond}}
-          {{/each}}
-        </p> 
-      </div>
-      <div class="col-md-6 col-sm-12">
-        <div id="about-carousel" class="carousel slide" data-ride="carousel" data-interval="3000">
-          <div class="carousel-inner" role="listbox">
-            <div class="carousel-item active">
-              <img class="d-block img-fluid" src="../img/about/1.jpg" alt="First slide">
-              <div class="carousel-caption d-none d-md-block">
-                <h3 class="carousel-text">Weberstrasse</h3>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <img class="d-block img-fluid" src="../img/about/2.jpg" alt="Second slide">
-              <div class="carousel-caption d-none d-md-block">
-                <h3 class="carousel-text">Beratung</h3>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <img class="d-block img-fluid" src="../img/about/3.jpg" alt="Second slide">
-              <div class="carousel-caption d-none d-md-block">
-                <h3 class="carousel-text">Praxis</h3>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <img class="d-block img-fluid" src="../img/about/4.jpg" alt="Second slide">
-              <div class="carousel-caption d-none d-md-block">
-                <h3 class="carousel-text">Massage</h3>
-              </div>
-            </div>
-          </div>
+<section id="about">
+  <div id="carouselIndicators" class="carousel slide carousel-fade" data-ride="carousel">
+    <ol class="carousel-indicators">
+      {{#each data.about.items}}
+        {{#ifCond @index '===' 0}}
+        <li data-target="#carouselIndicators" data-slide-to="{{@index}}" class="active"></li>
+        {{else}}
+        <li data-target="#carouselIndicators" data-slide-to="{{@index}}"></li>
+        {{/ifCond}}
+      {{/each}}
+    </ol>
+    <div class="carousel-inner" role="listbox">
+    {{#each data.about.items}}
+      {{#ifCond @index '===' 0}}
+      <div class="carousel-item carousel-item-{{inc @index}} active">
+      {{else}}
+      <div class="carousel-item carousel-item-{{inc @index}}">
+      {{/ifCond}}
+        <div class="carousel-caption d-none d-md-block carousel-text">
+          <h3 class="carousel-text">{{this.name}}</h3>
+          <p class="carousel-text">{{this.content}}</p>
         </div>
       </div>
+    {{/each}}
     </div>
   </div>
 </section>

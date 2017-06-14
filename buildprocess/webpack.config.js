@@ -12,16 +12,16 @@ const path = require('path');
 module.exports = function(devMode, project) {
   var config = {
 
-    context: path.resolve(__dirname, "..", "www", ".", project),
+    context: path.resolve(__dirname, "..", "projects", ".", project),
 
     entry: {
       vendorJS: ['jquery', 'jquery.easing', 'tether', 'bootstrap', 'scrollreveal'],
-      siteJS: '../../source/' + project + '/scripts/site.js',
+      siteJS: './source/scripts/site.js',
     },
 
     output: {
       filename: 'js/[name].js',
-      path: path.join(__dirname, "..", "www", ".", project),
+      path: path.join(__dirname, "..", "projects", ".", project),
       publicPath: "/"
     },
 
@@ -139,7 +139,7 @@ module.exports = function(devMode, project) {
         },
         {
           test: /\.html$/i,
-          include: path.resolve(__dirname, '..', 'source', project, 'html'),
+          include: path.resolve(__dirname, "..", 'projects', project, 'source', 'html'),
           use: [
             {
               loader: "file-loader",

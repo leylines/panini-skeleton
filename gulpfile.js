@@ -16,14 +16,14 @@ var development = environments.development;
 var production = environments.production;
 var project = gutil.env.project || 'naturapraxis';
 var port = process.env.SERVER_PORT || 4444;
-var source = 'source/' + project;
-var destination = 'source/' + project + '/html';
+var source = 'projects/' + project + '/source';
+var destination = 'projects/' + project + '/source/html';
 
 gutil.log("Project is: " + project);
 
 // Starts a BrowerSync instance
 gulp.task('server', ['build'], function(){
-  browser.init({server: './www/' + project, port: port});
+  browser.init({server: './projects/' + project, port: port});
 });
 
 // Watch files for changes

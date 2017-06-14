@@ -1,0 +1,22 @@
+#footer {
+  .col {
+    padding: 30px 40px 25px 40px;
+    text-align: left;
+    h6 {
+      margin-bottom: 15px;
+        color: darken($bg-primary, 10%);
+    }
+    .social-icons {
+      a {
+        font-size: 30px;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+#googleMap {
+  margin-top: 50px;
+  width: 100%;
+  height: 400px;
+}

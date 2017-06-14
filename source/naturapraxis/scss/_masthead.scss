@@ -1,0 +1,24 @@
+#masthead {
+  display: table;
+  width: 100%;
+  height: auto;
+  //padding: 100px 0;
+  text-align: center;
+  background: url(../img/backgrounds/flower.jpg);
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-attachment: fixed;
+  background-color: black;
+  background-size: cover;
+  .color-overlay {
+    background: rgba($color-primary, 0.6);
+  }
+  .intro-body {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  @media(min-width:768px) {
+    height: 100%;
+    padding: 0;
+  }
+}

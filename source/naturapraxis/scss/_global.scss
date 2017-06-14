@@ -1,0 +1,140 @@
+// Global styling for this template
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  @include body-font;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+
+}
+
+p {
+  line-height: 1.75;
+}
+
+a {
+  color: $theme-primary;
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    color: darken($bg-primary, 10%);
+  }
+  &.visited {
+    color: darken($bg-primary, 30%);
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  @include heading-font;
+}
+
+.primary-button {
+  color: white;
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    border-color: $color-primary;
+    background-color: white;
+    color: $color-primary;
+  }
+  &.visited {
+    color: darken($bg-primary, 30%);
+  }
+  border-color: $color-primary;
+  background-color: $color-primary;
+}
+
+.inverse-button {
+  color: $color-primary;
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    border-color: $color-primary;
+    background-color: $color-primary;
+    color: white;
+  }
+  &.visited {
+    color: darken($bg-primary, 30%);
+  }
+  border-color: $color-primary;
+  background-color: white;
+}
+
+section {
+  padding: 50px 0;
+  h2.section-heading {
+    font-size: 40px;
+    margin-top: 0;
+    margin-bottom: 25px;
+  }
+  h3.section-subheading {
+    font-size: 25px;
+    font-weight: 500;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    text-transform: none;
+  }
+}
+
+.bottom-gradient {
+  display: block;
+  width: 100%;
+  border: solid 0px #CCC;
+  border-bottom: none;
+  position: relative;
+  float: left;
+  &:after {
+    content:"";
+    background: -webkit-linear-gradient(left, rgba(66, 0, 66, 1) 0%, rgba(99, 0, 99, 1) 12%, rgba(204, 0, 204, 1) 47%, rgba(255, 0, 255, 1) 100%);
+    display: block;
+    height: 3px;
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    bottom: 0;
+  }
+}
+
+@media(min-width:768px) {
+    section {
+        padding: 100px 50px;
+    }
+}
+
+// Highlight color customization
+::-moz-selection {
+    background: $theme-primary;
+    text-shadow: none;
+}
+
+::selection {
+    background: $theme-primary;
+    text-shadow: none;
+}
+
+img::selection {
+    background: transparent;
+}
+
+img::-moz-selection {
+    background: transparent;
+}
+
+body {
+    -webkit-tap-highlight-color: $theme-primary;
+}

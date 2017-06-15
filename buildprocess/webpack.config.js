@@ -89,12 +89,13 @@ module.exports = function(devMode, project) {
                     require('postcss-import')({ root: loader.resourcePath }),
                     //require('postcss-cssnext')(),
                     require('autoprefixer')(),
+                    require('postcss-flexbugs-fixes')(),
                     //require('cssnano')()
                   ],
                   config: {
                     path: './postcss.config.js',
                     ctx: {
-                      //'cssnext': {},
+                      'cssnext': {},
                       'autoprefixer': {},
                       'cssnano': {},
                     }
@@ -170,7 +171,7 @@ module.exports = function(devMode, project) {
         warnings: false
       }
     }));
-    config.output.publicPath = 'naturapraxis';
+    config.output.publicPath = '/naturapraxis/';
   }
   return config;
 }

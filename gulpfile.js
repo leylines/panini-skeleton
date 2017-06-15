@@ -81,4 +81,4 @@ gulp.task('test',['validate-html']);
 gulp.task('clean',['clean']);
 gulp.task('build', ['compile-html', 'webpack']);
 gulp.task('default', ['set-development', 'server', 'watch']);
-gulp.task('deploy', ['set-production', 'server']);
+gulp.task('deploy', ['set-production', 'build']);

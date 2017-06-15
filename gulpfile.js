@@ -67,15 +67,15 @@ gulp.task('validate-html',['compile-html'], function() {
 
 gulp.task('webpack', function(done) {
 
+  var runWebpack = require('./buildprocess/runWebpack.js');
+  var webpack = require('webpack');
+  var webpackConfig = production() ? require('./buildprocess/webpack.config.js')(false, project) : require('./buildprocess/webpack.config.js')(true, project);
+
 //  if (production) {
 //    webpackPlugins.push(new webpack.optimize.UglifyJsPlugin({minimize: true}));
 //  }
 
-    var runWebpack = require('./buildprocess/runWebpack.js');
-    var webpack = require('webpack');
-    var webpackConfig = production() ? require('./buildprocess/webpack.config.js')(false, project) : require('./buildprocess/webpack.config.js')(true, project);
-
-    runWebpack(webpack, webpackConfig, done);
+  runWebpack(webpack, webpackConfig, done);
   
 });
 

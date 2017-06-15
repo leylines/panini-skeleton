@@ -22,7 +22,7 @@ module.exports = function(devMode, project) {
     output: {
       filename: 'js/[name].js',
       path: path.join(__dirname, "..", "projects", ".", project),
-      publicPath: "/"
+      publicPath: "/naturapraxis/"
     },
 
     plugins: [
@@ -48,6 +48,10 @@ module.exports = function(devMode, project) {
         name: 'vendorJS',
         filename: 'js/commons.chunk.js'
       }),
+
+//      new webpack.optimize.UglifyJsPlugin({
+//        minimize: true
+//      })
     ],
 
     devtool: devMode ? 'cheap-inline-source-map' : 'source-map',

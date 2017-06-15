@@ -22,7 +22,7 @@ module.exports = function(devMode, project) {
     output: {
       filename: 'js/[name].js',
       path: path.join(__dirname, "..", "projects", ".", project),
-      publicPath: "/naturapraxis/"
+      publicPath: "/"
     },
 
     plugins: [
@@ -49,9 +49,6 @@ module.exports = function(devMode, project) {
         filename: 'js/commons.chunk.js'
       }),
 
-//      new webpack.optimize.UglifyJsPlugin({
-//        minimize: true
-//      })
     ],
 
     devtool: devMode ? 'cheap-inline-source-map' : 'source-map',
@@ -166,6 +163,14 @@ module.exports = function(devMode, project) {
         }
       ]
     }
+  }
+  if (!devMode) {
+    config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    }));
+    config.output.publicPath = 'naturapraxis';
   }
   return config;
 }

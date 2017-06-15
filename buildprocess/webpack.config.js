@@ -17,6 +17,8 @@ module.exports = function(devMode, project) {
     entry: {
       vendorJS: ['jquery', 'jquery.easing', 'tether', 'bootstrap', 'scrollreveal'],
       siteJS: './source/scripts/site.js',
+      contactJS: './source/scripts/contact_me.js',
+      validateJS: './source/scripts/jqBootstrapValidation.js',
     },
 
     output: {

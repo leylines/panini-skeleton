@@ -5,6 +5,7 @@
 const webpack = require('webpack');
 const commonChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const SitemapPlugin = require('sitemap-webpack-plugin');
 
 const glob = require('glob');
 const path = require('path');
@@ -16,9 +17,7 @@ module.exports = function(devMode, project) {
 
     entry: {
       vendorJS: ['jquery', 'jquery.easing', 'tether', 'bootstrap', 'scrollreveal'],
-      siteJS: './source/scripts/site.js',
-      contactJS: './source/scripts/contact_me.js',
-      validateJS: './source/scripts/jqBootstrapValidation.js',
+      siteJS: ['./source/scripts/site.js', './source/scripts/contact_me.js', './source/scripts/jqBootstrapValidation.js'],
     },
 
     output: {
@@ -51,6 +50,12 @@ module.exports = function(devMode, project) {
         filename: 'js/commons.chunk.js'
       }),
 
+      new SitemapPlugin('https://leylines.github.io', ['/naturapraxis'], {
+        fileName: 'sitemap.xml',
+        lastMod: true,
+        changeFreq: 'monthly',
+        priority: '0.4'
+      }),
     ],
 
     devtool: devMode ? 'cheap-inline-source-map' : 'source-map',

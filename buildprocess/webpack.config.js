@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const commonChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const SitemapPlugin = require('sitemap-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 const glob = require('glob');
 const path = require('path');
@@ -55,6 +56,12 @@ module.exports = function(devMode, project) {
         lastMod: true,
         changeFreq: 'monthly',
         priority: '0.4'
+      }),
+
+      new FaviconsWebpackPlugin({
+        logo: './source/img/favicon/favicon.png',
+        prefix: 'favicons/',
+        statsFilename: 'favicons.json'
       }),
     ],
 

@@ -7,6 +7,7 @@ const commonChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const SitemapPlugin = require('sitemap-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const glob = require('glob');
 const path = require('path');
@@ -63,6 +64,7 @@ module.exports = function(devMode, project) {
         prefix: 'favicons/',
         statsFilename: 'favicons.json'
       }),
+
     ],
 
     devtool: devMode ? 'cheap-inline-source-map' : 'source-map',
@@ -156,16 +158,7 @@ module.exports = function(devMode, project) {
         {
           test: /\.html$/i,
           include: path.resolve(__dirname, "..", 'projects', project, 'source', 'html'),
-          use: [
-            {
-              loader: "file-loader",
-              options: {
-                 name: "[name].[ext]",
-              },
-            },
-            {
-              loader: "extract-loader",
-            },
+          use: devMode ? [
             {
               loader: "html-loader",
               options: {
@@ -174,11 +167,31 @@ module.exports = function(devMode, project) {
                 collapseWhitespace: false,
               },
             },
-          ],
+          ] : [
+            {
+              loader: "html-loader",
+              options: {
+                minimize: true,
+                removeComments: true,
+                collapseWhitespace: true,
+              },
+            },
+          ]
         }
       ]
     }
   }
+
+  var dir = __dirname + '/../projects/' + project + '/source/html';
+  var pages = glob.sync(dir + "/**/!(google*).html");
+
+  pages.map(page => config.plugins.push(new HtmlWebpackPlugin({
+    template: 'source/html/' + path.parse(page).base,
+    filename: path.parse(page).base,
+    favicon: 'source/img/favicon/favicon.png',
+    minify: false
+  })));
+
   if (!devMode) {
     config.plugins.push(new webpack.optimize.UglifyJsPlugin({
       compress: {

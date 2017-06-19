@@ -85,14 +85,14 @@ module.exports = function(devMode, project) {
         },
         {
           test: /\.scss/,
-          use: ExtractTextPlugin.extract({
+          use: devMode ? ExtractTextPlugin.extract({
+          //use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
             loader: [
               {
                 loader: 'css-loader',
                 options: {
                   modules: false,
-                  localIdentName: '[name]__[local]___[hash:base64:5]',
                   importLoaders: 3,
                   sourceMap: true,
                 },
@@ -106,7 +106,44 @@ module.exports = function(devMode, project) {
                     //require('postcss-cssnext')(),
                     require('autoprefixer')(),
                     require('postcss-flexbugs-fixes')(),
-                    //require('cssnano')()
+                  ],
+                  config: {
+                    path: './postcss.config.js',
+                    ctx: {
+                      'cssnext': {},
+                      'autoprefixer': {},
+                    }
+                  }
+                },
+              },
+              {
+                loader: 'sass-loader',
+                options: {
+                  sourceMap: true,
+                },
+              },
+            ],
+          }) : ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            loader: [
+              {
+                loader: 'css-loader',
+                options: {
+                  modules: false,
+                  importLoaders: 3,
+                  sourceMap: true,
+                },
+              },
+              {
+                loader: 'postcss-loader',
+                options: {
+                  sourceMap: true,
+                  plugins: (loader) => [
+                    require('postcss-import')({ root: loader.resourcePath }),
+                    //require('postcss-cssnext')(),
+                    require('autoprefixer')(),
+                    require('postcss-flexbugs-fixes')(),
+                    require('cssnano')()
                   ],
                   config: {
                     path: './postcss.config.js',

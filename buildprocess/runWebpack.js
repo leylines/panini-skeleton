@@ -10,6 +10,7 @@ function runWebpack(webpack, config, doneCallback) {
             console.log(stats.toString({
                 colors: true,
                 modules: false,
+                reasons: false,
                 chunkModules: false
             }));
 

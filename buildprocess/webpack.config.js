@@ -106,12 +106,14 @@ module.exports = function(devMode, project) {
                     //require('postcss-cssnext')(),
                     require('autoprefixer')(),
                     require('postcss-flexbugs-fixes')(),
+                    require('cssnano')()
                   ],
                   config: {
                     path: './postcss.config.js',
                     ctx: {
-                      'cssnext': {},
+                      //'cssnext': {},
                       'autoprefixer': {},
+                      'cssnano': {},
                     }
                   }
                 },
@@ -148,7 +150,7 @@ module.exports = function(devMode, project) {
                   config: {
                     path: './postcss.config.js',
                     ctx: {
-                      'cssnext': {},
+                      //'cssnext': {},
                       'autoprefixer': {},
                       'cssnano': {},
                     }

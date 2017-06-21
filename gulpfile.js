@@ -19,7 +19,7 @@ var project = gutil.env.project || 'naturapraxis';
 var port = process.env.SERVER_PORT || 4444;
 var source = 'projects/' + project + '/source';
 var destination = 'projects/' + project + '/source/html';
-var config = JSON.parse(fs.readFileSync('projects/' + project + '/source/data/data.json'));
+var config = JSON.parse(fs.readFileSync('projects/' + project + '/source/data/meta.json'));
 
 gutil.log("Project is: " + project);
 gutil.log("URL is: " + config.url);

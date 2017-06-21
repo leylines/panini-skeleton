@@ -9,9 +9,22 @@ const SitemapPlugin = require('sitemap-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PurifyCSSPlugin = require('purifycss-webpack');
+const RobotstxtPlugin = require('robotstxt-webpack-plugin').default;
 
 const glob = require('glob');
 const path = require('path');
+
+const robotsoptions = {
+  policy: [
+    {
+      userAgent: '*',
+        allow: '/',
+        disallow: '/source'
+    }
+  ],
+  sitemap: 'https://leylines.github.io/naturapraxis/sitemap.xml',
+  host: 'https://leylines.github.io/'
+};
 
 module.exports = function(devMode, project) {
   var config = {
@@ -65,6 +78,8 @@ module.exports = function(devMode, project) {
         prefix: 'favicons/',
         statsFilename: 'favicons.json'
       }),
+
+      new RobotstxtPlugin(robotsoptions)
 
     ],
 

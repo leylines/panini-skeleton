@@ -11,6 +11,7 @@ var path = require('path');
 var rimraf = require('rimraf');
 var validator = require('gulp-html');
 var WebpackDevServer = require('webpack-dev-server');
+var fs = require('fs');
 
 var development = environments.development;
 var production = environments.production;
@@ -18,8 +19,11 @@ var project = gutil.env.project || 'naturapraxis';
 var port = process.env.SERVER_PORT || 4444;
 var source = 'projects/' + project + '/source';
 var destination = 'projects/' + project + '/source/html';
+var config = JSON.parse(fs.readFileSync('projects/' + project + '/source/data/data.json'));
 
 gutil.log("Project is: " + project);
+gutil.log("URL is: " + config.url);
+
 
 // Starts a BrowerSync instance
 gulp.task('server', ['build'], function(){
@@ -69,7 +73,7 @@ gulp.task('webpack', function(done) {
 
   var runWebpack = require('./buildprocess/runWebpack.js');
   var webpack = require('webpack');
-  var webpackConfig = production() ? require('./buildprocess/webpack.config.js')(false, project) : require('./buildprocess/webpack.config.js')(true, project);
+  var webpackConfig = production() ? require('./buildprocess/webpack.config.js')(false, project, config.url) : require('./buildprocess/webpack.config.js')(true, project, config.url);
 
   runWebpack(webpack, webpackConfig, done);
   

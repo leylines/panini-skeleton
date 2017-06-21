@@ -14,19 +14,9 @@ const RobotstxtPlugin = require('robotstxt-webpack-plugin').default;
 const glob = require('glob');
 const path = require('path');
 
-const robotsoptions = {
-  policy: [
-    {
-      userAgent: '*',
-        allow: '/',
-        disallow: '/source'
-    }
-  ],
-  sitemap: 'https://leylines.github.io/naturapraxis/sitemap.xml',
-  host: 'https://leylines.github.io/'
-};
 
-module.exports = function(devMode, project) {
+module.exports = function(devMode, project, url) {
+
   var config = {
 
     context: path.resolve(__dirname, "..", "projects", ".", project),
@@ -66,7 +56,7 @@ module.exports = function(devMode, project) {
         filename: 'js/commons.chunk.js'
       }),
 
-      new SitemapPlugin('https://leylines.github.io', ['/naturapraxis'], {
+      new SitemapPlugin(url, ['/', 'blog'], {
         fileName: 'sitemap.xml',
         lastMod: true,
         changeFreq: 'monthly',
@@ -79,7 +69,17 @@ module.exports = function(devMode, project) {
         statsFilename: 'favicons.json'
       }),
 
-      new RobotstxtPlugin(robotsoptions)
+      new RobotstxtPlugin({
+        policy: [
+          {
+            userAgent: '*',
+            allow: '/',
+            disallow: '/source'
+          }
+        ],
+        sitemap: url + '/sitemap.xml',
+        host: url
+      }),
 
     ],
 
@@ -122,7 +122,7 @@ module.exports = function(devMode, project) {
                     //require('postcss-cssnext')(),
                     require('autoprefixer')(),
                     require('postcss-flexbugs-fixes')(),
-                    require('cssnano')()
+                    //require('cssnano')()
                   ],
                   config: {
                     path: './postcss.config.js',

@@ -8,6 +8,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const SitemapPlugin = require('sitemap-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PurifyCSSPlugin = require('purifycss-webpack');
 
 const glob = require('glob');
 const path = require('path');
@@ -145,7 +146,7 @@ module.exports = function(devMode, project) {
                     //require('postcss-cssnext')(),
                     require('autoprefixer')(),
                     require('postcss-flexbugs-fixes')(),
-                    require('cssnano')()
+                    //require('cssnano')()
                   ],
                   config: {
                     path: './postcss.config.js',
@@ -232,6 +233,11 @@ module.exports = function(devMode, project) {
   })));
 
   if (!devMode) {
+    config.plugins.push(new PurifyCSSPlugin({
+      paths: glob.sync(path.join(dir, '/**/*.html')),
+      minimize: true,
+      verbose: true
+    }));
     config.plugins.push(new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false

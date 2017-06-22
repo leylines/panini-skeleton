@@ -54,8 +54,7 @@
     "script-loader": "^0.7.0",
     "sitemap-webpack-plugin": "^0.3.0",
     "style-loader": "^0.18.2",
-    "uglify-js": "^2.8.0",
-    "uglifyjs-webpack-plugin": "^0.4.3",
+    "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.8",
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5"
